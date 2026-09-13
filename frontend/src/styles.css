@@ -1,0 +1,93 @@
+:root {
+  --bg-main: #0f1115;
+  --bg-card: #171a21;
+  --bg-card-hover: #1e222b;
+  --bg-input: #12141a;
+  --border-color: #262b36;
+  --border-focus: #6366f1;
+
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  --accent-primary: #6366f1;
+  --accent-primary-hover: #4f46e5;
+  --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  --accent-gradient-hover: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #db2777 100%);
+
+  --status-queued-bg: rgba(148, 163, 184, 0.12);
+  --status-queued-text: #94a3b8;
+  --status-downloading-bg: rgba(59, 130, 246, 0.15);
+  --status-downloading-text: #60a5fa;
+  --status-transcribing-bg: rgba(168, 85, 247, 0.15);
+  --status-transcribing-text: #c084fc;
+  --status-analyzing-bg: rgba(236, 72, 153, 0.15);
+  --status-analyzing-text: #f472b6;
+  --status-clipping-bg: rgba(245, 158, 11, 0.15);
+  --status-clipping-text: #fbbf24;
+  --status-done-bg: rgba(16, 185, 129, 0.15);
+  --status-done-text: #34d399;
+  --status-error-bg: rgba(239, 68, 68, 0.15);
+  --status-error-text: #f87171;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 24px rgba(99, 102, 241, 0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111317;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2f3c;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3c4456;
+}
+
+/* Common keyframes */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

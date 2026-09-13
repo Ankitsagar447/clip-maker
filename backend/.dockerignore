@@ -1,0 +1,9 @@
+node_modules
+npm-debug.log
+.env
+.git
+.gitignore
+downloads/*
+!downloads/.gitkeep
+output/*
+!output/.gitkeep

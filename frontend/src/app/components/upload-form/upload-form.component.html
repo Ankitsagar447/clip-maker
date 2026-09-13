@@ -1,0 +1,110 @@
+<div class="upload-card">
+  <div class="upload-header">
+    <div class="badge-tag">
+      <span class="sparkle-icon">✨</span>
+      <span>AI Viral Moment Extractor</span>
+    </div>
+    <h2 class="upload-title">Turn Any Long Video Into Viral Shorts</h2>
+    <p class="upload-subtitle">
+      Powered by local Whisper transcription & Claude AI. Automatically finds the most engaging moments, crops to 9:16 portrait, and burns in subtitles.
+    </p>
+  </div>
+
+  <form class="upload-form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="input-container" [class.has-error]="errorMessage">
+      <div class="input-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+        </svg>
+      </div>
+
+      <input
+        type="url"
+        id="video-url-input"
+        name="videoUrl"
+        class="url-input"
+        [(ngModel)]="videoUrl"
+        placeholder="Paste video URL (or multiple URLs) — processed sequentially 1-by-1..."
+        [disabled]="isSubmitting"
+        autocomplete="off"
+        spellcheck="false"
+      />
+
+      <div class="input-actions">
+        @if (videoUrl) {
+          <button
+            type="button"
+            class="action-btn clear-btn"
+            (click)="clearInput()"
+            title="Clear input"
+            [disabled]="isSubmitting"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        } @else {
+          <button
+            type="button"
+            class="action-btn paste-btn"
+            (click)="pasteFromClipboard()"
+            title="Paste from clipboard"
+            [disabled]="isSubmitting"
+          >
+            <span>Paste</span>
+          </button>
+        }
+
+        <button
+          type="submit"
+          id="submit-job-btn"
+          class="submit-btn"
+          [disabled]="!isValidUrl(videoUrl) || isSubmitting"
+        >
+          @if (isSubmitting) {
+            <span class="spinner"></span>
+            <span>Queuing...</span>
+          } @else {
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Add to Queue</span>
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Supported platforms list & worker indicator -->
+    <div class="platforms-row">
+      <span class="platforms-label">Supported platforms:</span>
+      <span class="platform-chip youtube">YouTube</span>
+      <span class="platform-chip vimeo">Vimeo</span>
+      <span class="platform-chip twitch">Twitch</span>
+      <span class="platform-chip kick">Kick</span>
+      <span class="platform-chip worker-chip">⚡ 1 Video at a Time Queue</span>
+    </div>
+
+    <!-- Feedback alerts -->
+    @if (errorMessage) {
+      <div class="alert alert-error" role="alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    @if (successMessage) {
+      <div class="alert alert-success" role="alert">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>{{ successMessage }}</span>
+      </div>
+    }
+  </form>
+</div>

@@ -1,0 +1,115 @@
+<div class="app-layout">
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"></polygon>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">Clip Maker</span>
+          <span class="brand-badge">Auto-Pilot Studio</span>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="nav-tabs">
+        <button
+          type="button"
+          class="nav-tab-btn"
+          [class.active]="activeTab === 'studio'"
+          (click)="setTab('studio')"
+        >
+          <span>🎬</span>
+          <span>Clips Studio</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab-btn"
+          [class.active]="activeTab === 'autopilot'"
+          (click)="setTab('autopilot')"
+        >
+          <span>📡</span>
+          <span>Channel Auto-Pilot</span>
+        </button>
+
+        <button
+          type="button"
+          class="nav-tab-btn"
+          [class.active]="activeTab === 'scheduler'"
+          (click)="setTab('scheduler')"
+        >
+          <span>🚀</span>
+          <span>YouTube Scheduler</span>
+        </button>
+      </nav>
+
+      <div class="header-badges">
+        <span class="tech-pill">
+          <span class="tech-dot"></span>
+          Whisper
+        </span>
+        @if (llmStatus?.activeProvider === 'gemini') {
+          <span class="tech-pill active-ai" title="Google Gemini 2.5 Flash Free Tier">
+            <span class="tech-dot gemini"></span>
+            ✨ Gemini AI (Free)
+          </span>
+        } @else if (llmStatus?.activeProvider === 'ollama') {
+          <span class="tech-pill active-ai" title="Local Ollama">
+            <span class="tech-dot ollama"></span>
+            🦙 Ollama (Local)
+          </span>
+        } @else if (llmStatus?.activeProvider === 'anthropic') {
+          <span class="tech-pill active-ai" title="Claude AI">
+            <span class="tech-dot claude"></span>
+            🧠 Claude AI
+          </span>
+        } @else {
+          <span class="tech-pill warning" title="Set free GEMINI_API_KEY in backend/.env">
+            <span class="tech-dot warning"></span>
+            ⚡ Gemini / Ollama / Claude
+          </span>
+        }
+        <span class="tech-pill">
+          <span class="tech-dot"></span>
+          YT Auto-Upload
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="app-main">
+    <div class="app-container">
+      <!-- TAB 1: Clips Studio (Manual URL clipping & Jobs list) -->
+      @if (activeTab === 'studio') {
+        <app-upload-form (jobCreated)="onJobCreated($event)"></app-upload-form>
+        <app-job-list #jobList></app-job-list>
+      }
+
+      <!-- TAB 2: Channel Auto-Pilot (Monitored channels, daily frequency 1-20, auto-clipping) -->
+      @if (activeTab === 'autopilot') {
+        <app-channel-autopilot (newJobTriggered)="onNewAutoJob($event)"></app-channel-autopilot>
+      }
+
+      <!-- TAB 3: YouTube Shorts Auto-Uploader & Scheduler Timeline -->
+      @if (activeTab === 'scheduler') {
+        <app-youtube-scheduler #youtubeScheduler></app-youtube-scheduler>
+      }
+    </div>
+  </main>
+
+  <!-- App Footer -->
+  <footer class="app-footer">
+    <div class="app-container footer-content">
+      <p>Clip Maker · Local, self-hosted short-form video extraction & YouTube auto-upload studio</p>
+      <div class="footer-links">
+        <span>No cloud speech APIs · 100% private transcription · Auto-Pilot scheduler</span>
+      </div>
+    </div>
+  </footer>
+</div>
