@@ -162,7 +162,14 @@ async function uploadVideo({ filePath, title, description, tags, privacyStatus =
       },
     },
     media: {
-      body: fs.createReadStream(filePath),
+      body: (() => {
+        if (!filePath || !fs.existsSync(filePath)) {
+          throw new Error(`Video file does not exist on disk: ${filePath}`);
+        }
+        const stream = fs.createReadStream(filePath);
+        stream.on('error', (err) => console.error('Video upload stream error:', err.message));
+        return stream;
+      })(),
     },
   });
 

@@ -132,6 +132,16 @@ async function processUpload(id) {
   const item = queue[id];
   if (!item) return null;
 
+  if (!item.videoFilePath || !fs.existsSync(item.videoFilePath)) {
+    console.warn(
+      `[Upload Scheduler] Video file does not exist on disk for queue item ${id}: ${item.videoFilePath}`
+    );
+    return updateQueueItem(id, {
+      status: 'failed',
+      error: 'Video file no longer exists on disk',
+    });
+  }
+
   updateQueueItem(id, { status: 'uploading', error: null });
 
   try {
