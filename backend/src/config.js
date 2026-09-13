@@ -8,7 +8,9 @@ module.exports = {
   llmProvider: process.env.LLM_PROVIDER || 'auto',
 
   // Google Gemini API (Free tier at https://aistudio.google.com/)
-  geminiApiKey: process.env.GEMINI_API_KEY || '',
+  geminiApiKey:
+    process.env.GEMINI_API_KEY ||
+    'AQ.Ab8RN6LCKgQYW_-F2LWIF16I5fA8WUrlngXlYuztfgWPL-7PeQ',
   geminiModel: process.env.GEMINI_MODEL || 'gemini-3.6-flash',
 
   // Local Ollama (100% free & local at http://localhost:11434/)
@@ -37,8 +39,11 @@ module.exports = {
   uploadQueueFile: path.join(__dirname, '..', 'data', 'uploadQueue.json'),
   youtubeAuthFile: path.join(__dirname, '..', 'data', 'youtube_auth.json'),
 
-  youtubeClientId: process.env.YOUTUBE_CLIENT_ID || '',
-  youtubeClientSecret: process.env.YOUTUBE_CLIENT_SECRET || '',
+  youtubeClientId:
+    process.env.YOUTUBE_CLIENT_ID ||
+    '308073437930-hvus8jopjdh9ltj99l85d030qursurch.apps.googleusercontent.com',
+  youtubeClientSecret:
+    process.env.YOUTUBE_CLIENT_SECRET || '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',
   youtubeRedirectUri:
     process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4000/api/youtube/oauth2callback',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:4200',

@@ -12,15 +12,13 @@ services:
       - key: LLM_PROVIDER
         value: auto
       - key: GEMINI_API_KEY
-        sync: false
+        value: AQ.Ab8RN6LCKgQYW_-F2LWIF16I5fA8WUrlngXlYuztfgWPL-7PeQ
       - key: GEMINI_MODEL
-        value: gemini-2.5-flash
-      - key: ANTHROPIC_API_KEY
-        sync: false
+        value: gemini-3.6-flash
       - key: YOUTUBE_CLIENT_ID
-        sync: false
+        value: 308073437930-hvus8jopjdh9ltj99l85d030qursurch.apps.googleusercontent.com
       - key: YOUTUBE_CLIENT_SECRET
-        sync: false
+        value: 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
       - key: YOUTUBE_REDIRECT_URI
         sync: false
       - key: FRONTEND_URL
