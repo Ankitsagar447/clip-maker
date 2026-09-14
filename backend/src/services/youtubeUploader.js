@@ -17,16 +17,6 @@ function hasValidCredentials() {
   );
 }
 
-function getOAuth2Client() {
-  if (!hasValidCredentials()) {
-    return null;
-  }
-  return new google.auth.OAuth2(
-    config.youtubeClientId,
-    config.youtubeClientSecret,
-    config.youtubeRedirectUri
-  );
-}
 
 function loadAuthData() {
   if (fs.existsSync(config.youtubeAuthFile)) {
@@ -36,6 +26,12 @@ function loadAuthData() {
       console.error('Failed to parse youtube_auth.json:', e.message);
     }
   }
+  // Check if persisted in environment variable (useful on Render/ephemeral disks)
+  if (process.env.YOUTUBE_AUTH_JSON) {
+    try {
+      return JSON.parse(process.env.YOUTUBE_AUTH_JSON);
+    } catch (e) {}
+  }
   return null;
 }
 
@@ -44,6 +40,37 @@ function saveAuthData(data) {
     fs.mkdirSync(config.dataDir, { recursive: true });
   }
   fs.writeFileSync(config.youtubeAuthFile, JSON.stringify(data, null, 2));
+}
+
+function getOAuth2Client() {
+  if (!hasValidCredentials()) {
+    return null;
+  }
+  const client = new google.auth.OAuth2(
+    config.youtubeClientId,
+    config.youtubeClientSecret,
+    config.youtubeRedirectUri
+  );
+
+  // Automatically persist newly refreshed access tokens whenever Google rotates them
+  client.on('tokens', (newTokens) => {
+    console.log('[YouTube OAuth] Refreshed tokens received from Google API.');
+    const current = loadAuthData() || {};
+    const merged = {
+      ...current,
+      tokens: {
+        ...(current.tokens || {}),
+        ...newTokens,
+      },
+    };
+    // Ensure existing refresh_token is never wiped out by an access-token-only refresh
+    if (!newTokens.refresh_token && current.tokens?.refresh_token) {
+      merged.tokens.refresh_token = current.tokens.refresh_token;
+    }
+    saveAuthData(merged);
+  });
+
+  return client;
 }
 
 function getAuthStatus() {
@@ -68,6 +95,7 @@ function getAuthUrl() {
   return oauth2Client.generateAuthUrl({
     access_type: 'offline',
     prompt: 'consent',
+    include_granted_scopes: true,
     scope: SCOPES,
   });
 }
@@ -79,7 +107,18 @@ async function handleOAuthCallback(code) {
   }
 
   const { tokens } = await oauth2Client.getToken(code);
-  oauth2Client.setCredentials(tokens);
+
+  // Merge with existing tokens to ensure refresh_token is NEVER dropped on re-login
+  const existingAuth = loadAuthData();
+  const mergedTokens = {
+    ...(existingAuth?.tokens || {}),
+    ...tokens,
+  };
+  if (!tokens.refresh_token && existingAuth?.tokens?.refresh_token) {
+    mergedTokens.refresh_token = existingAuth.tokens.refresh_token;
+  }
+
+  oauth2Client.setCredentials(mergedTokens);
 
   // Fetch connected YouTube channel details
   const youtube = google.youtube({ version: 'v3', auth: oauth2Client });
@@ -105,8 +144,9 @@ async function handleOAuthCallback(code) {
         connectedAt: new Date().toISOString(),
       };
 
-  const authData = { tokens, channel: channelInfo };
+  const authData = { tokens: mergedTokens, channel: channelInfo };
   saveAuthData(authData);
+  console.log(`[YouTube OAuth] Successfully connected channel: "${channelInfo.title}" (${channelInfo.id})`);
   return authData;
 }
 
