@@ -47,7 +47,7 @@ app.get('/api/diag', (req, res) => {
     arch: process.arch,
     node: process.version,
     env_PATH: process.env.PATH,
-    ytdlp: check('yt-dlp'),
+    ytdlp: check(config.ytDlpPath) || config.ytDlpPath,
     ffmpeg: check('ffmpeg'),
     ffprobe: check('ffprobe'),
     python3: check('python3'),
@@ -63,6 +63,15 @@ app.get('/api/llm/status', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+const { ensureYtDlp } = require('./src/utils/ensureYtDlp');
+
+// Ensure yt-dlp is available before background services start
+try {
+  ensureYtDlp();
+} catch (e) {
+  console.error('[server] ensureYtDlp error:', e.message);
+}
 
 // Start background services & sequential queue runner
 initQueue();

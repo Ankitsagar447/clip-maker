@@ -21,7 +21,15 @@ module.exports = {
   anthropicApiKey: process.env.ANTHROPIC_API_KEY || '',
   anthropicModel: process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-6',
 
-  ytDlpPath: process.env.YT_DLP_PATH || 'yt-dlp',
+  ytDlpPath: (() => {
+    if (process.env.YT_DLP_PATH) return process.env.YT_DLP_PATH;
+    const fs = require('fs');
+    const localBin = path.join(__dirname, '..', 'bin', 'yt-dlp');
+    if (fs.existsSync(localBin)) return localBin;
+    const nodeBin = path.join(__dirname, '..', 'node_modules', '.bin', 'yt-dlp');
+    if (fs.existsSync(nodeBin)) return nodeBin;
+    return 'yt-dlp';
+  })(),
   ffmpegPath: process.env.FFMPEG_PATH || 'ffmpeg',
   ffprobePath: process.env.FFPROBE_PATH || 'ffprobe',
 
