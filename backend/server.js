@@ -31,6 +31,30 @@ app.get('/', (req, res) => {
   });
 });
 
+const { execSync } = require('child_process');
+
+// Temporary diagnostic endpoint to check installed binaries on hosting environment
+app.get('/api/diag', (req, res) => {
+  const check = (cmd) => {
+    try {
+      return execSync(`which ${cmd} || true`, { encoding: 'utf8' }).trim();
+    } catch (e) {
+      return 'error: ' + e.message;
+    }
+  };
+  res.json({
+    platform: process.platform,
+    arch: process.arch,
+    node: process.version,
+    env_PATH: process.env.PATH,
+    ytdlp: check('yt-dlp'),
+    ffmpeg: check('ffmpeg'),
+    ffprobe: check('ffprobe'),
+    python3: check('python3'),
+    curl: check('curl'),
+  });
+});
+
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.get('/api/llm/status', async (req, res) => {
   try {
