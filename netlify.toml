@@ -4,10 +4,16 @@
   command = "npm run build"
 
 # API Reverse Proxy: Forward all frontend /api/* calls to your deployed backend
-# Change the 'to' URL to your actual backend URL (from Render, Hugging Face, or Cloudflare Tunnel)
 [[redirects]]
   from = "/api/*"
-  to = "https://clip-maker-backend.onrender.com/api/:splat"
+  to = "https://clip-maker-3.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# Video and Subtitles Reverse Proxy: Forward all /output/* calls to your deployed backend
+[[redirects]]
+  from = "/output/*"
+  to = "https://clip-maker-3.onrender.com/output/:splat"
   status = 200
   force = true
 

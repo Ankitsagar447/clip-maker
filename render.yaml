@@ -20,6 +20,6 @@ services:
       - key: YOUTUBE_CLIENT_SECRET
         value: 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
       - key: YOUTUBE_REDIRECT_URI
-        sync: false
+        value: https://clip-maker-3.onrender.com/api/youtube/oauth2callback
       - key: FRONTEND_URL
-        sync: false
+        value: https://makeclip.netlify.app

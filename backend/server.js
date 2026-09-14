@@ -21,7 +21,15 @@ app.use('/api/jobs', jobsRouter);
 app.use('/api/channels', channelsRouter);
 app.use('/api/youtube', youtubeRouter);
 
-const { getProviderStatus } = require('./src/services/llmClient');
+// Root endpoint for service status check
+app.get('/', (req, res) => {
+  res.json({
+    status: 'online',
+    service: 'Clip Maker Backend API',
+    health: '/api/health',
+    frontend: config.frontendUrl
+  });
+});
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 app.get('/api/llm/status', async (req, res) => {

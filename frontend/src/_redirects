@@ -1,2 +1,3 @@
-/api/*  https://clip-maker-backend.onrender.com/api/:splat  200!
-/*      /index.html                                          200
+/api/*     https://clip-maker-3.onrender.com/api/:splat     200!
+/output/*  https://clip-maker-3.onrender.com/output/:splat  200!
+/*         /index.html                                      200

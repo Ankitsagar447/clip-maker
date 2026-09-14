@@ -45,7 +45,8 @@ module.exports = {
   youtubeClientSecret:
     process.env.YOUTUBE_CLIENT_SECRET || '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',
   youtubeRedirectUri:
-    process.env.YOUTUBE_REDIRECT_URI || 'http://localhost:4000/api/youtube/oauth2callback',
-  frontendUrl: process.env.FRONTEND_URL || 'http://localhost:4200',
+    process.env.YOUTUBE_REDIRECT_URI ||
+    'https://clip-maker-3.onrender.com/api/youtube/oauth2callback',
+  frontendUrl: process.env.FRONTEND_URL || 'https://makeclip.netlify.app',
   channelCheckIntervalMinutes: Number(process.env.CHANNEL_CHECK_INTERVAL_MINUTES || 30),
 };

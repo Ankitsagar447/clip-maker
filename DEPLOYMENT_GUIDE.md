@@ -53,12 +53,12 @@ In the **Environment Variables** section on Render, add:
 | `ANTHROPIC_API_KEY` | *(Your Anthropic Claude API key, if using Claude)* |
 | `YOUTUBE_CLIENT_ID` | `308073437930-...apps.googleusercontent.com` |
 | `YOUTUBE_CLIENT_SECRET` | `GOCSPX-...` |
-| `YOUTUBE_REDIRECT_URI` | `https://clip-maker-backend.onrender.com/api/youtube/oauth2callback` |
-| `FRONTEND_URL` | `https://your-site.netlify.app` *(update after creating Netlify site)* |
+| `YOUTUBE_REDIRECT_URI` | `https://clip-maker-3.onrender.com/api/youtube/oauth2callback` |
+| `FRONTEND_URL` | `https://makeclip.netlify.app` |
 
 ### Step 4: Click "Create Web Service"
 Render will build the Docker container (installing Node.js, FFmpeg, and yt-dlp) and start your server.
-Once deployed, copy your live backend URL (e.g., `https://clip-maker-backend.onrender.com`).
+Once deployed, copy your live backend URL (e.g., `https://clip-maker-3.onrender.com`).
 
 ---
 
@@ -81,7 +81,13 @@ Open `netlify.toml` in your repository and update the `/api/*` target URL with y
 ```toml
 [[redirects]]
   from = "/api/*"
-  to = "https://clip-maker-backend.onrender.com/api/:splat"
+  to = "https://clip-maker-3.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/output/*"
+  to = "https://clip-maker-3.onrender.com/output/:splat"
   status = 200
   force = true
 
@@ -102,9 +108,9 @@ To allow signing into your YouTube account from the deployed app:
 1. Open [Google Cloud Console Credentials](https://console.cloud.google.com/apis/credentials).
 2. Click on your **OAuth 2.0 Client ID**.
 3. Under **Authorized JavaScript origins**, add:
-   * `https://your-site.netlify.app`
+   * `https://makeclip.netlify.app`
 4. Under **Authorized redirect URIs**, add:
-   * `https://clip-maker-backend.onrender.com/api/youtube/oauth2callback`
+   * `https://clip-maker-3.onrender.com/api/youtube/oauth2callback`
 5. Click **Save**.
 
 ---
