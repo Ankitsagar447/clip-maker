@@ -44,9 +44,22 @@ module.exports = {
     '308073437930-hvus8jopjdh9ltj99l85d030qursurch.apps.googleusercontent.com',
   youtubeClientSecret:
     process.env.YOUTUBE_CLIENT_SECRET || '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',
-  youtubeRedirectUri:
-    process.env.YOUTUBE_REDIRECT_URI ||
-    'https://clip-maker-3.onrender.com/api/youtube/oauth2callback',
-  frontendUrl: process.env.FRONTEND_URL || 'https://makeclip.netlify.app',
+  youtubeRedirectUri: (() => {
+    const isCloud = Boolean(process.env.RENDER || process.env.NODE_ENV === 'production');
+    const cloudUrl = (process.env.RENDER_EXTERNAL_URL || 'https://clip-maker-3.onrender.com').replace(/\/$/, '');
+    const envUri = process.env.YOUTUBE_REDIRECT_URI;
+    if (isCloud && (!envUri || envUri.includes('localhost'))) {
+      return `${cloudUrl}/api/youtube/oauth2callback`;
+    }
+    return envUri || 'http://localhost:4000/api/youtube/oauth2callback';
+  })(),
+  frontendUrl: (() => {
+    const isCloud = Boolean(process.env.RENDER || process.env.NODE_ENV === 'production');
+    const envFrontend = process.env.FRONTEND_URL;
+    if (isCloud && (!envFrontend || envFrontend.includes('localhost'))) {
+      return 'https://makeclip.netlify.app';
+    }
+    return envFrontend || 'http://localhost:4200';
+  })(),
   channelCheckIntervalMinutes: Number(process.env.CHANNEL_CHECK_INTERVAL_MINUTES || 30),
 };
